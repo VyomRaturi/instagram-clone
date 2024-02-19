@@ -1,7 +1,12 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { BsBookmark, BsGrid3X3, BsSuitHeart } from "react-icons/bs";
+import useUserProfileStore from "../../store/userProfileStore";
 
 const ProfileTabs = () => {
+    const setCurrentTab = useUserProfileStore((state) => state.setCurrentTab);
+    const { currentTab } = useUserProfileStore((state) => ({
+        currentTab: state.currentTab,
+    }));
     return (
         <Flex
             w={"full"}
@@ -11,11 +16,14 @@ const ProfileTabs = () => {
             fontWeight={"bold"}
         >
             <Flex
-                borderTop={"1px solid white"}
+                borderTop={
+                    currentTab === "myposts" ? "1px solid white" : "none"
+                }
                 alignItems={"center"}
                 p="3"
                 gap={1}
                 cursor={"pointer"}
+                onClick={() => setCurrentTab("myposts")}
             >
                 <Box fontSize={20}>
                     <BsGrid3X3 />
@@ -25,7 +33,14 @@ const ProfileTabs = () => {
                 </Text>
             </Flex>
 
-            <Flex alignItems={"center"} p="3" gap={1} cursor={"pointer"}>
+            <Flex
+                borderTop={currentTab === "saved" ? "1px solid white" : "none"}
+                alignItems={"center"}
+                p="3"
+                gap={1}
+                cursor={"pointer"}
+                onClick={() => setCurrentTab("saved")}
+            >
                 <Box fontSize={20}>
                     <BsBookmark />
                 </Box>
@@ -34,7 +49,14 @@ const ProfileTabs = () => {
                 </Text>
             </Flex>
 
-            <Flex alignItems={"center"} p="3" gap={1} cursor={"pointer"}>
+            <Flex
+                borderTop={currentTab === "likes" ? "1px solid white" : "none"}
+                alignItems={"center"}
+                p="3"
+                gap={1}
+                cursor={"pointer"}
+                onClick={() => setCurrentTab("likes")}
+            >
                 <Box fontSize={20}>
                     <BsSuitHeart fontWeight={"bold"} />
                 </Box>

@@ -1,12 +1,15 @@
 import { Avatar, Flex, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { timeAgo } from "../../utils/timeAgo";
-import useUserProfileStore from "../../store/userProfileStore";
+import useGetUserProfileById from "../../hooks/useGetUserProfileById";
+import { Skeleton, SkeletonCircle } from "@chakra-ui/react";
 
-const Caption = ({ post }) => {
-    const userProfile = useUserProfileStore((state) => state.userProfile);
+const LikedPostCaption = ({ post }) => {
+    const { isLoading, userProfile } = useGetUserProfileById(post.createdBy);
 
-    return (
+    return isLoading ? (
+        <CaptionSkeleton />
+    ) : (
         <Flex gap={4}>
             <Link to={`/${userProfile.username}`}>
                 <Avatar src={userProfile.profilePicURL} size={"sm"} />
@@ -28,4 +31,16 @@ const Caption = ({ post }) => {
     );
 };
 
-export default Caption;
+export default LikedPostCaption;
+
+const CaptionSkeleton = () => {
+    return (
+        <Flex gap={4} w={"full"} alignItems={"center"}>
+            <SkeletonCircle h={10} w="10" />
+            <Flex gap={1} flexDir={"column"}>
+                <Skeleton height={2} width={100} />
+                <Skeleton height={2} width={50} />
+            </Flex>
+        </Flex>
+    );
+};

@@ -1,8 +1,16 @@
 import { Box, Container, Flex } from "@chakra-ui/react";
 import FeedPosts from "../../components/FeedPosts/FeedPosts";
 import SuggestedUsers from "../../components/SuggestedUsers/SuggestedUsers";
+import { useEffect } from "react";
+import useUserProfileStore from "../../store/userProfileStore";
 
 const HomePage = () => {
+    const setCurrentTab = useUserProfileStore((state) => state.setCurrentTab);
+
+    useEffect(() => {
+        setCurrentTab("myposts");
+    }, [setCurrentTab]);
+
     return (
         <Container maxW={"container.lg"}>
             <Flex gap={20}>

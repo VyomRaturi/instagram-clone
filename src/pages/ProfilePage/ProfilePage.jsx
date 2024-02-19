@@ -13,10 +13,16 @@ import ProfilePosts from "../../components/Profile/ProfilePosts";
 import useGetUserProfileByUsername from "../../hooks/useGetUserProfileByUsername";
 import { useParams } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
+import useUserProfileStore from "../../store/userProfileStore";
+import LikedPosts from "../../components/Profile/LikedPosts";
 
 const ProfilePage = () => {
     const { username } = useParams();
     const { isLoading, userProfile } = useGetUserProfileByUsername(username);
+
+    const { currentTab } = useUserProfileStore((state) => ({
+        currentTab: state.currentTab,
+    }));
 
     const userNotFound = !isLoading && !userProfile;
     if (userNotFound) return <UserNotFound />;
@@ -43,7 +49,8 @@ const ProfilePage = () => {
                 direction={"column"}
             >
                 <ProfileTabs />
-                <ProfilePosts />
+                {currentTab === "myposts" && <ProfilePosts />}
+                {currentTab === "likes" && <LikedPosts />}
             </Flex>
         </Container>
     );

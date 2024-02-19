@@ -27,11 +27,12 @@ import usePostStore from "../../store/postStore";
 import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { firestore, storage } from "../../firebase/firebase";
 import { deleteObject, ref } from "firebase/storage";
-import Caption from "../Comment/Caption";
+import useGetUserProfileById from "../../hooks/useGetUserProfileById";
+import LikedPostCaption from "./LikedPostCaption";
 
-const ProfilePost = ({ post }) => {
+const LikedPost = ({ post }) => {
     const { onOpen, onClose, isOpen } = useDisclosure();
-    const userProfile = useUserProfileStore((state) => state.userProfile);
+    const { isLoading, userProfile } = useGetUserProfileById(post.createdBy);
     const authUser = useAuthStore((state) => state.user);
     const showToast = useShowToast();
     const [isDeleting, setIsDeleting] = useState(false);
@@ -158,16 +159,22 @@ const ProfilePost = ({ post }) => {
                                 >
                                     <Flex alignItems={"center"} gap={4}>
                                         <Avatar
-                                            src={userProfile.profilePicURL}
+                                            src={
+                                                !isLoading &&
+                                                userProfile.profilePicURL
+                                            }
                                             size={"sm"}
-                                            name={userProfile.username}
+                                            name={
+                                                !isLoading &&
+                                                userProfile.username
+                                            }
                                         />
                                         <Text fontWeight={"bold"} fontSize={12}>
-                                            {userProfile.username}
+                                            {!isLoading && userProfile.username}
                                         </Text>
                                     </Flex>
 
-                                    {authUser?.uid === userProfile.uid && (
+                                    {authUser?.uid === userProfile?.uid && (
                                         <Button
                                             size={"sm"}
                                             bg={"transparent"}
@@ -195,7 +202,9 @@ const ProfilePost = ({ post }) => {
                                     maxH={"350px"}
                                     overflowY={"auto"}
                                 >
-                                    {post.caption && <Caption post={post} />}
+                                    {post.caption && (
+                                        <LikedPostCaption post={post} />
+                                    )}
                                     {post.comments.map((comment, index) => (
                                         <Comment
                                             key={index}
@@ -214,4 +223,4 @@ const ProfilePost = ({ post }) => {
     );
 };
 
-export default ProfilePost;
+export default LikedPost;

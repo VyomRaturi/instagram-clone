@@ -4,6 +4,9 @@ const useUserProfileStore = create((set) => ({
     userProfile: null,
     setUserProfile: (userProfile) => set({ userProfile }),
 
+    currentTab: "myposts",
+    setCurrentTab: (tab) => set({ currentTab: tab }),
+
     addPost: (post) =>
         set((state) => ({
             userProfile: {
